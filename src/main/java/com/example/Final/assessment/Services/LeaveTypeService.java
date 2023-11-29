@@ -1,8 +1,11 @@
 package com.example.Final.assessment.Services;
 
+import com.example.Final.assessment.Mappers.LeaveMapper;
 import com.example.Final.assessment.Mappers.LeaveTypeMapper;
+import com.example.Final.assessment.Models.LeaveDTO;
 import com.example.Final.assessment.Models.LeaveTypeDTO;
 import com.example.Final.assessment.Repositories.LeaveTypeRepository;
+import com.example.Final.assessment.entities.LeaveEntity;
 import com.example.Final.assessment.entities.LeavetypeEntity;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,13 @@ public class LeaveTypeService {
     public List<LeaveTypeDTO> getAllLeaveTypes(){
         List<LeavetypeEntity> leaves=leaveTypeRepository.findAll();
         return leaves.stream().map(leaveTypeMapper::leaveTypeEntityToLeaveTypeDTO).collect(Collectors.toList());
+    }
+
+    public LeaveTypeDTO getLeaveTypeById(int id) {
+        LeavetypeEntity leaveType = leaveTypeRepository.findById(id).orElse(null);
+        if (leaveType != null)
+            return LeaveTypeMapper.INSTANCE.leaveTypeEntityToLeaveTypeDTO(leaveType);
+        return null;
     }
 
     public LeaveTypeDTO createLeaveType(LeaveTypeDTO leaveTypeDTO){

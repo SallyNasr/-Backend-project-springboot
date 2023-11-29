@@ -33,11 +33,12 @@ public class LeaveService {
         return leaves.stream().map(leaveMapper::leaveEntityToLeaveDTO).collect(Collectors.toList());
     }
 
-//    public LeaveDTO createLeave(LeaveDTO leaveDTO){
-//        LeaveEntity leaveEntity=leaveMapper.leaveDTOToLeaveEntity(leaveDTO);
-//        leaveEntity=leaveRepository.save(leaveEntity);
-//        return leaveMapper.leaveEntityToLeaveDTO(leaveEntity);
-//    }
+    public LeaveDTO getLeaveById(int id) {
+        LeaveEntity leave = leaveRepository.findById(id).orElse(null);
+        if (leave != null)
+            return LeaveMapper.INSTANCE.leaveEntityToLeaveDTO(leave);
+        return null;
+    }
 
     public void deleteLeave(int leaveId) {
         leaveRepository.deleteById(leaveId);

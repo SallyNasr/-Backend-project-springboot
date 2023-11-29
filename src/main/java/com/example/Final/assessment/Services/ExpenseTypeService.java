@@ -1,8 +1,11 @@
 package com.example.Final.assessment.Services;
 
+import com.example.Final.assessment.Mappers.ExpenseClaimMapper;
 import com.example.Final.assessment.Mappers.ExpenseTypeMapper;
+import com.example.Final.assessment.Models.ExpenseClaimDTO;
 import com.example.Final.assessment.Models.ExpenseTypeDTO;
 import com.example.Final.assessment.Repositories.ExpenseTypeRepository;
+import com.example.Final.assessment.entities.ExpenseclaimEntity;
 import com.example.Final.assessment.entities.ExpensetypeEntity;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +30,13 @@ public class ExpenseTypeService {
         return employees.stream()
                 .map(expenseTypeMapper::ExpenseTypeEntityToExpenseTypeDTO)
                 .collect(Collectors.toList());
+    }
+
+    public ExpenseTypeDTO getExpenseTypeById(int id) {
+        ExpensetypeEntity expenseType = expenseTypeRepository.findById(id).orElse(null);
+        if (expenseType != null)
+            return ExpenseTypeMapper.INSTANCE.ExpenseTypeEntityToExpenseTypeDTO(expenseType);
+        return null;
     }
 
     public ExpenseTypeDTO createExpenseType(ExpenseTypeDTO expenseTypeDTO) {

@@ -1,5 +1,6 @@
 package com.example.Final.assessment.Controllers;
 
+import com.example.Final.assessment.Models.ExpenseClaimDTO;
 import com.example.Final.assessment.Models.ExpenseClaimEntryDTO;
 import com.example.Final.assessment.Services.BusinessService;
 import com.example.Final.assessment.Services.ExpenseClaimEntryService;
@@ -26,6 +27,18 @@ public class ExpenseClaimEntryController {
         List<ExpenseClaimEntryDTO> expenseClaimEntrys = expenseClaimEntryService.getAllExpenseClaimEntrys();
         return new ResponseEntity<>(expenseClaimEntrys, HttpStatus.OK);
     }
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<ExpenseClaimEntryDTO> getExpenseClaimEntryById(@PathVariable int id) {
+        ExpenseClaimEntryDTO expenseClaimEntry = expenseClaimEntryService.getExpenseClaimEntryById(id);
+        if (expenseClaimEntry != null) {
+            return new ResponseEntity<>(expenseClaimEntry, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     @PostMapping("/add")
     public ResponseEntity<ExpenseClaimEntryDTO> createExpenseClaimEntry(@RequestBody ExpenseClaimEntryDTO expenseClaimEntryDTO) {
         ExpenseClaimEntryDTO createdExpenseClaimEntry = expenseClaimEntryService.createExpenseClaimEntry(expenseClaimEntryDTO);

@@ -1,5 +1,6 @@
 package com.example.Final.assessment.Controllers;
 
+import com.example.Final.assessment.Models.ExpenseClaimDTO;
 import com.example.Final.assessment.Models.ExpenseTypeDTO;
 import com.example.Final.assessment.Services.BusinessService;
 import com.example.Final.assessment.Services.ExpenseTypeService;
@@ -26,6 +27,17 @@ public class ExpenseTypeController {
         List<ExpenseTypeDTO> expenseTypes = expenseTypeService.getAllExpenseTypes();
         return new ResponseEntity<>(expenseTypes, HttpStatus.OK);
     }
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<ExpenseTypeDTO> getExpenseClaimById(@PathVariable int id) {
+        ExpenseTypeDTO expenseType = expenseTypeService.getExpenseTypeById(id);
+        if (expenseType != null) {
+            return new ResponseEntity<>(expenseType, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping("/add")
     public ResponseEntity<ExpenseTypeDTO> createExpenseType(@RequestBody ExpenseTypeDTO expenseTypeDTO) {
         ExpenseTypeDTO createdExpenseType = expenseTypeService.createExpenseType(expenseTypeDTO);

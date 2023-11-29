@@ -1,5 +1,6 @@
 package com.example.Final.assessment.Controllers;
 
+import com.example.Final.assessment.Models.EmployeeDTO;
 import com.example.Final.assessment.Models.ExpenseClaimDTO;
 import com.example.Final.assessment.Services.BusinessService;
 import com.example.Final.assessment.Services.ExpenseClaimService;
@@ -25,6 +26,18 @@ public class ExpenseClaimController {
         List<ExpenseClaimDTO> expenseClaims = expenseClaimService.getAllExpenseClaims();
         return new ResponseEntity<>(expenseClaims, HttpStatus.OK);
     }
+
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<ExpenseClaimDTO> getExpenseClaimById(@PathVariable int id) {
+        ExpenseClaimDTO expenseClaim = expenseClaimService.getExpenseClaimById(id);
+        if (expenseClaim != null) {
+            return new ResponseEntity<>(expenseClaim, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping("/add")
     public ResponseEntity<ExpenseClaimDTO> createExpenseClaim(@RequestBody ExpenseClaimDTO expenseClaimDTO) {
         ExpenseClaimDTO createdExpenseClaim = expenseClaimService.createExpenseClaim(expenseClaimDTO);
@@ -37,7 +50,7 @@ public class ExpenseClaimController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable int id) {
+    public ResponseEntity<Void> deleteExpenseClaim(@PathVariable int id) {
         expenseClaimService.deleteExpenseClaim(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -55,7 +68,7 @@ public class ExpenseClaimController {
 //        return ResponseEntity.ok(result);
 //    }
 
-    //second method show all the fields without total
+    //second method show all the fields54
     @GetMapping("/totalclaims/{employeeId}")
     public List<Map<String, Double>> getTotalClaimsPerTypePerEmployee(@PathVariable int employeeId) {
         return expenseClaimService.getTotalClaimsPerTypePerEmployee(employeeId);

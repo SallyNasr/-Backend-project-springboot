@@ -1,6 +1,7 @@
 package com.example.Final.assessment.Controllers;
 
 
+import com.example.Final.assessment.Models.LeaveDTO;
 import com.example.Final.assessment.Models.LeaveTypeDTO;
 import com.example.Final.assessment.Services.BusinessService;
 import com.example.Final.assessment.Services.LeaveTypeService;
@@ -28,7 +29,15 @@ public class LeaveTypeController {
         List<LeaveTypeDTO> leavetypes = leaveTypeService.getAllLeaveTypes();
         return new ResponseEntity<>(leavetypes, HttpStatus.OK);
     }
-
+    @GetMapping("/find/{id}")
+    public ResponseEntity<LeaveTypeDTO> getLeaveTypeById(@PathVariable int id) {
+        LeaveTypeDTO leaveType = leaveTypeService.getLeaveTypeById(id);
+        if (leaveType != null) {
+            return new ResponseEntity<>(leaveType, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     @PostMapping("/add")
     public ResponseEntity<LeaveTypeDTO> createLeaveType(@RequestBody LeaveTypeDTO leaveTypeDTO) {
         LeaveTypeDTO createdLeaveType = leaveTypeService.createLeaveType(leaveTypeDTO);

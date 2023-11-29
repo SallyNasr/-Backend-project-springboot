@@ -1,10 +1,17 @@
 package com.example.Final.assessment.Services;
 
 import com.example.Final.assessment.Mappers.ExpenseClaimEntryMapper;
+import com.example.Final.assessment.Mappers.ExpenseClaimMapper;
+import com.example.Final.assessment.Models.ExpenseClaimDTO;
 import com.example.Final.assessment.Models.ExpenseClaimEntryDTO;
 import com.example.Final.assessment.Repositories.ExpenseClaimEntryRepository;
+import com.example.Final.assessment.entities.ExpenseclaimEntity;
 import com.example.Final.assessment.entities.ExpenseclaimentryEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Map;
@@ -16,10 +23,12 @@ public class ExpenseClaimEntryService {
     private final ExpenseClaimEntryRepository expenseClaimEntryRepository;
     private final ExpenseClaimEntryMapper expenseClaimEntryMapper;
     private final BusinessService businessService;
-    public ExpenseClaimEntryService(ExpenseClaimEntryRepository expenseClaimEntryRepository, ExpenseClaimEntryMapper expenseClaimEntryMapper, BusinessService businessService) {
+    private final ExpenseClaimEntryService expenseClaimEntryService;
+    public ExpenseClaimEntryService(ExpenseClaimEntryRepository expenseClaimEntryRepository, ExpenseClaimEntryMapper expenseClaimEntryMapper, BusinessService businessService, ExpenseClaimEntryService expenseClaimEntryService) {
         this.expenseClaimEntryRepository = expenseClaimEntryRepository;
         this.expenseClaimEntryMapper = expenseClaimEntryMapper;
         this.businessService = businessService;
+        this.expenseClaimEntryService = expenseClaimEntryService;
     }
 
     public List<ExpenseClaimEntryDTO> getAllExpenseClaimEntrys() {
@@ -27,6 +36,13 @@ public class ExpenseClaimEntryService {
         return employees.stream()
                 .map(expenseClaimEntryMapper::ExpenseClaimEntryEntityToExpenseClaimEntryDTO)
                 .collect(Collectors.toList());
+    }
+
+    public ExpenseClaimEntryDTO getExpenseClaimEntryById(int id) {
+        ExpenseclaimentryEntity expenseclaimentry = expenseClaimEntryRepository.findById(id).orElse(null);
+        if (expenseclaimentry != null)
+            return ExpenseClaimEntryMapper.INSTANCE.ExpenseClaimEntryEntityToExpenseClaimEntryDTO(expenseclaimentry);
+        return null;
     }
 
     public ExpenseClaimEntryDTO createExpenseClaimEntry(ExpenseClaimEntryDTO expenseClaimEntryDTO) {

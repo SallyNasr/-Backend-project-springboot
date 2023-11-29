@@ -2,6 +2,7 @@ package com.example.Final.assessment.Controllers;
 
 import com.example.Final.assessment.Mappers.LeaveMapper;
 import com.example.Final.assessment.Models.EmployeeDTO;
+import com.example.Final.assessment.Models.ExpenseClaimDTO;
 import com.example.Final.assessment.Models.LeaveDTO;
 import com.example.Final.assessment.Repositories.LeaveRepository;
 import com.example.Final.assessment.Services.BusinessService;
@@ -42,11 +43,16 @@ public class LeaveController {
         return new ResponseEntity<>(leaves, HttpStatus.OK);
     }
 
-//    @PostMapping("/add")
-//    public ResponseEntity<LeaveDTO> createLeave(@RequestBody LeaveDTO leaveDTO) {
-//        LeaveDTO createdLeave = leaveService.createLeave(leaveDTO);
-//        return new ResponseEntity<>(createdLeave, HttpStatus.CREATED);
-//    }
+    @GetMapping("/find/{id}")
+    public ResponseEntity<LeaveDTO> getLeaveById(@PathVariable int id) {
+        LeaveDTO leave = leaveService.getLeaveById(id);
+        if (leave != null) {
+            return new ResponseEntity<>(leave, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteLeave(@PathVariable int id) {
@@ -61,14 +67,14 @@ public class LeaveController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-//done jarabta
+
     @PostMapping("/submit")
     public ResponseEntity<LeaveDTO> submitLeave(@RequestBody LeaveDTO leaveDTO) {
        LeaveDTO responseDTO = leaveService.submitLeave(leaveDTO);
        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
-//done jarabta
+
     @PostMapping("/leaverange")
    public ResponseEntity<List<LeaveDTO>> getLeavesByEmployeeIdAndStartDateAndEndDate(
             @RequestParam int employeeId,
@@ -77,7 +83,7 @@ public class LeaveController {
         List<LeaveDTO> leaves=leaveService.getLeavesByEmployeeIdAndFromDateAndToDate(employeeId, fromDate, toDate);
         return new ResponseEntity<>(leaves,HttpStatus.OK);
 }
-//zobtet jarabta
+
     @GetMapping("/byTypeAndEmployee")
     public ResponseEntity<Page<LeaveDTO>> getLeavesByLeaveTypeAndEmployeeId(
             @RequestParam int leaveType,

@@ -3,11 +3,14 @@ package com.example.Final.assessment.Services;
 import com.example.Final.assessment.Mappers.EmployeeMapper;
 import com.example.Final.assessment.Mappers.ExpenseClaimEntryMapper;
 import com.example.Final.assessment.Mappers.ExpenseClaimMapper;
+import com.example.Final.assessment.Models.EmployeeDTO;
 import com.example.Final.assessment.Models.ExpenseClaimDTO;
 import com.example.Final.assessment.Models.ExpenseClaimEntryDTO;
+import com.example.Final.assessment.Models.ExpenseTypeDTO;
 import com.example.Final.assessment.Repositories.ExpenseClaimEntryRepository;
 import com.example.Final.assessment.Repositories.ExpenseClaimRepository;
 import com.example.Final.assessment.Repositories.ExpenseTypeRepository;
+import com.example.Final.assessment.entities.EmployeeEntity;
 import com.example.Final.assessment.entities.ExpenseclaimEntity;
 import com.example.Final.assessment.entities.ExpenseclaimentryEntity;
 import com.example.Final.assessment.entities.ExpensetypeEntity;
@@ -33,7 +36,7 @@ public class ExpenseClaimService {
 
     private final EmployeeMapper employeeMapper;
 
-    public ExpenseClaimService(ExpenseClaimRepository expenseClaimRepository, ExpenseTypeRepository expenseTypeRepository, ExpenseClaimMapper expenseClaimMapper, BusinessService businessService, ExpenseClaimEntryRepository expenseClaimEntryRepository, ExpenseClaimEntryMapper expenseClaimEntryMapper,  EmployeeMapper employeeMapper) {
+    public ExpenseClaimService(ExpenseClaimRepository expenseClaimRepository, ExpenseTypeRepository expenseTypeRepository, ExpenseClaimMapper expenseClaimMapper, BusinessService businessService, ExpenseClaimEntryRepository expenseClaimEntryRepository, ExpenseClaimEntryMapper expenseClaimEntryMapper, EmployeeMapper employeeMapper) {
         this.expenseClaimRepository = expenseClaimRepository;
         this.expenseTypeRepository = expenseTypeRepository;
         this.expenseClaimMapper = expenseClaimMapper;
@@ -48,6 +51,13 @@ public class ExpenseClaimService {
         return employees.stream()
                 .map(expenseClaimMapper::ExpenseClaimEntityToExpenseClaimDTO)
                 .collect(Collectors.toList());
+    }
+
+    public ExpenseClaimDTO getExpenseClaimById(int id) {
+        ExpenseclaimEntity expenseclaim = expenseClaimRepository.findById(id).orElse(null);
+        if (expenseclaim != null)
+            return ExpenseClaimMapper.INSTANCE.ExpenseClaimEntityToExpenseClaimDTO(expenseclaim);
+        return null;
     }
 
     public ExpenseClaimDTO createExpenseClaim(ExpenseClaimDTO expenseClaimDTO) {
@@ -70,7 +80,6 @@ public class ExpenseClaimService {
     }
 
 
-
     public class ResourceNotFoundException extends RuntimeException {
         public ResourceNotFoundException(String resourceName, String fieldName, Object fieldValue) {
             super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
@@ -78,8 +87,8 @@ public class ExpenseClaimService {
     }
 
 
-    // Save an expense claim with entries
 
+    // Save an expense claim with entries
     public ExpenseClaimDTO saveExpenseClaimWithEntries(ExpenseClaimDTO expenseClaimDTO, List<ExpenseClaimEntryDTO> entryDTOs) {
         ExpenseclaimEntity expenseClaimEntity = expenseClaimMapper.ExpenseClaimDTOToExpenseClaimEntity(expenseClaimDTO);
         expenseClaimEntity.setStatus("success");
@@ -94,7 +103,6 @@ public class ExpenseClaimService {
         } catch (ParseException e) {
             // Handle the exception as needed
         }
-
 
         BigDecimal totalAmount = BigDecimal.ZERO;
 
@@ -112,7 +120,7 @@ public class ExpenseClaimService {
 
             ExpenseclaimentryEntity entryEntity = expenseClaimEntryMapper.ExpenseClaimEntryDTOToExpenseClaimEntryEntity(entryDTO);
             entryEntity.setExpenseClaim(expenseClaimEntity.getId());
-            entryEntity.setExpenseType(expenseType.getId()); // Set the expense type
+            entryEntity.setExpenseType(expenseType.getId());
             expenseClaimEntryRepository.save(entryEntity);
         }
 
@@ -122,8 +130,7 @@ public class ExpenseClaimService {
         return expenseClaimMapper.ExpenseClaimEntityToExpenseClaimDTO(expenseClaimEntity);
     }
 
-
-//    public Map<String, Double> getTotalClaimsPerTypePerEmployee(int employeeId) {
+    //    public Map<String, Double> getTotalClaimsPerTypePerEmployee(int employeeId) {
 //        List<Map<String, Double>> results = expenseClaimRepository.getTotalClaimsPerTypePerEmployee(employeeId);
 //
 //        Map<String, Double> totalClaimsPerType = new HashMap<>();
@@ -135,7 +142,7 @@ public class ExpenseClaimService {
 //            if (expenseTypeValue != null) {
 //                expenseTypeId = (int) Math.round(expenseTypeValue); // Convert to Integer
 //            }else {
-////
+//
 ////                throw new IllegalArgumentException("ExpenseType value is null");
 //               expenseTypeId=3;
 //            }
@@ -148,13 +155,15 @@ public class ExpenseClaimService {
 //
 //            totalClaimsPerType.merge(expenseTypeName, totalAmount, Double::sum);
 //        }
-//
 //        return totalClaimsPerType;
 //    }
 
-//    second method show all the fields
-    public List<Map<String, Double>> getTotalClaimsPerTypePerEmployee(int employeeId) {
-        return expenseClaimRepository.getTotalClaimsPerTypePerEmployee(employeeId);
+    //    show all the fields
+     public List<Map<String, Double>> getTotalClaimsPerTypePerEmployee(int employeeId) {
+        List<Map<String, Double>> results = expenseClaimRepository.getTotalClaimsPerTypePerEmployee(employeeId);
+        return results;
     }
+
+
 
 }
