@@ -66,9 +66,11 @@ public class EmployeeService {
         employeeRepository.saveAndFlush(entityToUpdate);
     }
 
-    public List<EmployeeEntity> getEmployeesByDepartment (int departmentId){
-        return employeeRepository.findByDepartmentId(departmentId);
-    }
+public List<EmployeeDTO> getEmployeesByDepartment(int departmentId) {
+    List<EmployeeEntity> employees = employeeRepository.findByDepartmentId(departmentId);
+    return employeeMapper.employeeEntitiesToEmployeeDTOs(employees);
+}
+
 
     public void deleteEmployee(int employeeId) {
         employeeRepository.deleteById(employeeId);
@@ -79,6 +81,7 @@ public class EmployeeService {
         public ResourceNotFoundException(String resourceName, String fieldName, Object fieldValue) {
             super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
         }
+
     }
 
 }

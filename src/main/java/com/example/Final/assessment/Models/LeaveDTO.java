@@ -8,8 +8,9 @@ import java.sql.Date;
 public class LeaveDTO {
     private int id;
     private int leaveType;
-    private Date from;
-    private Date to;
+    private Date fromDate;
+    private Date toDate;
     private int numberOfDays;
     private String note;
+    private int employeeId;
 }

@@ -2,6 +2,7 @@ package com.example.Final.assessment.Controllers;
 
 import com.example.Final.assessment.Models.EmployeeDTO;
 import com.example.Final.assessment.Services.BusinessService;
+import com.example.Final.assessment.Services.DepartmentService;
 import com.example.Final.assessment.Services.EmployeeService;
 import com.example.Final.assessment.entities.EmployeeEntity;
 import org.springframework.http.HttpStatus;
@@ -17,11 +18,13 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     private final BusinessService businessService;
+private final DepartmentService departmentService;
 
-    public EmployeeController(EmployeeService employeeService, BusinessService businessService) {
+    public EmployeeController(EmployeeService employeeService, BusinessService businessService, DepartmentService departmentService) {
         this.employeeService = employeeService;
         this.businessService = businessService;
 
+        this.departmentService = departmentService;
     }
 
     @GetMapping("/all")
@@ -40,12 +43,13 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping("/byDepartment/{departmentId}")
-    public ResponseEntity<List<EmployeeEntity>> getEmployeesByDepartment(@PathVariable int departmentId) {
-        List<EmployeeEntity> employees = employeeService.getEmployeesByDepartment(departmentId);
+      @GetMapping("/byDepartment/{departmentId}")
+    public ResponseEntity<List<EmployeeDTO>> getEmployeesByDepartment(@PathVariable int departmentId) {
+        List<EmployeeDTO> employees = employeeService.getEmployeesByDepartment(departmentId);
         return new ResponseEntity<>(employees, HttpStatus.OK);
-
     }
+
+
     @PostMapping("/add")
     public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
         EmployeeDTO createdEmployee = employeeService.createEmployee(employeeDTO);
@@ -74,4 +78,5 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

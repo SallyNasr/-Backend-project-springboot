@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Data
 @Entity
-@Table(name = "leave", schema = "employees_database", catalog = "")
+@Table(name = "leavetable", schema = "employees_database", catalog = "")
 public class LeaveEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -18,16 +18,19 @@ public class LeaveEntity {
     @Column(name = "leave_type")
     private int leaveType;
     @Basic
-    @Column(name = "from")
-    private Date from;
+    @Column(name = "From_Date")
+    private Date fromDate;
     @Basic
-    @Column(name = "to")
-    private Date to;
+    @Column(name = "To_Date")
+    private Date toDate;
     @Basic
     @Column(name = "number of days")
     private int numberOfDays;
     @Basic
     @Column(name = "note")
     private String note;
+    @Basic
+    @Column(name = "employee_id")
+    private int employeeId;
 
 }

@@ -21,7 +21,7 @@ public class DepartmentController {
     }
 
     // Example endpoint: Get all departments
-    @GetMapping
+    @GetMapping("all")
     public ResponseEntity<List<DepartmentEntity>> getAllDepartments() {
         List<DepartmentEntity> departments = departmentService.getAllDepartments();
         return new ResponseEntity<>(departments, HttpStatus.OK);

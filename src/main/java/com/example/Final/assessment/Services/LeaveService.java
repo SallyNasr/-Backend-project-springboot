@@ -1,9 +1,12 @@
 package com.example.Final.assessment.Services;
 
 import com.example.Final.assessment.Mappers.LeaveMapper;
+import com.example.Final.assessment.Models.EmployeeDTO;
 import com.example.Final.assessment.Models.LeaveDTO;
 import com.example.Final.assessment.Repositories.LeaveRepository;
 import com.example.Final.assessment.entities.LeaveEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -30,11 +33,11 @@ public class LeaveService {
         return leaves.stream().map(leaveMapper::leaveEntityToLeaveDTO).collect(Collectors.toList());
     }
 
-    public LeaveDTO createLeave(LeaveDTO leaveDTO){
-        LeaveEntity leaveEntity=leaveMapper.leaveDTOToLeaveEntity(leaveDTO);
-        leaveEntity=leaveRepository.save(leaveEntity);
-        return leaveMapper.leaveEntityToLeaveDTO(leaveEntity);
-    }
+//    public LeaveDTO createLeave(LeaveDTO leaveDTO){
+//        LeaveEntity leaveEntity=leaveMapper.leaveDTOToLeaveEntity(leaveDTO);
+//        leaveEntity=leaveRepository.save(leaveEntity);
+//        return leaveMapper.leaveEntityToLeaveDTO(leaveEntity);
+//    }
 
     public void deleteLeave(int leaveId) {
         leaveRepository.deleteById(leaveId);
@@ -49,17 +52,37 @@ public class LeaveService {
         leaveRepository.saveAndFlush(entityToUpdate);
     }
 
+
+
     public class ResourceNotFoundException extends RuntimeException {
         public ResourceNotFoundException(String resourceName, String fieldName, Object fieldValue) {
             super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
         }
     }
+//Submit leave request
 
+    public LeaveDTO submitLeave(LeaveDTO leaveDTO) {
+        LeaveEntity leaveEntity=leaveMapper.leaveDTOToLeaveEntity(leaveDTO);
+        try {
+            leaveRepository.save(leaveEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }        return leaveDTO;
+    }
 
-    //to retrieve the leaves of an employee for a specific range of dates (from, to)
-//    public List<LeaveDTO> getLeavesForEmployeeInDateRange(Long employeeId, Date fromDate, Date toDate) {
-//        List<LeaveEntity> leaves = leaveRepository.findByEmployeeIdAndDateRange(employeeId, fromDate, toDate);
-//        return leaveMapper.leaveEntitiesToLeaveDTOs(leaves);
-//    }
+    public List<LeaveDTO> getLeavesByEmployeeIdAndFromDateAndToDate(int employeeId, Date fromDate, Date toDate) {
+        List<LeaveEntity> leaveEntities = leaveRepository.getLeavesByEmployeeIdAndFromDateAndToDate(employeeId, fromDate, toDate);
+        return leaveEntities.stream()
+                .map(leaveMapper::leaveEntityToLeaveDTO)
+                .collect(Collectors.toList());
+    }
+
+    public Page<LeaveDTO> getLeavesByLeaveTypeAndEmployeeId(Map<String, Object> parameters, int page, int size) {
+        int leaveType = (int) parameters.get("leaveType");
+        int employeeId = (int) parameters.get("employeeId");
+        PageRequest pageable = PageRequest.of(page, size);
+        Page<LeaveEntity> leavePage = leaveRepository.getLeavesByLeaveTypeAndEmployeeId(leaveType, employeeId, pageable);
+        return leavePage.map(leaveMapper::leaveEntityToLeaveDTO);
+    }
 
 }

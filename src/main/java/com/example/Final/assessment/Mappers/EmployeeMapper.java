@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface EmployeeMapper {
     EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
@@ -13,5 +15,6 @@ public interface EmployeeMapper {
     @Mapping(target = "id", ignore = true)
     EmployeeEntity employeeDTOToEmployeeEntity(EmployeeDTO employeeDTO);
 
+    List<EmployeeDTO> employeeEntitiesToEmployeeDTOs(List<EmployeeEntity> employeeEntities);
 
 }
