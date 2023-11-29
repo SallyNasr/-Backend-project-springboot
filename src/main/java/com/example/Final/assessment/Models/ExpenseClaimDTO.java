@@ -1,5 +1,6 @@
 package com.example.Final.assessment.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -19,7 +20,7 @@ import java.util.Map;
 @Data
 public class ExpenseClaimDTO {
     private int id;
-   @DateTimeFormat(pattern = "dd/MM/yyyy")
+   @JsonFormat(pattern = "dd/MM/yyyy")
     private Date date;
     private String description;
     private Double total;

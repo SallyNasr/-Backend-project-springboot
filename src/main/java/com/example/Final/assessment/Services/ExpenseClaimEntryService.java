@@ -23,12 +23,10 @@ public class ExpenseClaimEntryService {
     private final ExpenseClaimEntryRepository expenseClaimEntryRepository;
     private final ExpenseClaimEntryMapper expenseClaimEntryMapper;
     private final BusinessService businessService;
-    private final ExpenseClaimEntryService expenseClaimEntryService;
-    public ExpenseClaimEntryService(ExpenseClaimEntryRepository expenseClaimEntryRepository, ExpenseClaimEntryMapper expenseClaimEntryMapper, BusinessService businessService, ExpenseClaimEntryService expenseClaimEntryService) {
+    public ExpenseClaimEntryService(ExpenseClaimEntryRepository expenseClaimEntryRepository, ExpenseClaimEntryMapper expenseClaimEntryMapper, BusinessService businessService) {
         this.expenseClaimEntryRepository = expenseClaimEntryRepository;
         this.expenseClaimEntryMapper = expenseClaimEntryMapper;
         this.businessService = businessService;
-        this.expenseClaimEntryService = expenseClaimEntryService;
     }
 
     public List<ExpenseClaimEntryDTO> getAllExpenseClaimEntrys() {

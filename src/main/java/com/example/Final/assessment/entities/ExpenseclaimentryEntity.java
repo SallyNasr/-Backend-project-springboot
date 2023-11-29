@@ -1,5 +1,6 @@
 package com.example.Final.assessment.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,7 @@ public class ExpenseclaimentryEntity {
     private int id;
     @Basic
     @Column(name = "date")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date date;
     @Basic
     @Column(name = "expense_type")

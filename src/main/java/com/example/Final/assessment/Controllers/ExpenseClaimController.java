@@ -27,7 +27,6 @@ public class ExpenseClaimController {
         return new ResponseEntity<>(expenseClaims, HttpStatus.OK);
     }
 
-
     @GetMapping("/find/{id}")
     public ResponseEntity<ExpenseClaimDTO> getExpenseClaimById(@PathVariable int id) {
         ExpenseClaimDTO expenseClaim = expenseClaimService.getExpenseClaimById(id);

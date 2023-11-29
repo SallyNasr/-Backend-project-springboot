@@ -109,7 +109,7 @@ public class ExpenseClaimService {
         for (ExpenseClaimEntryDTO entryDTO : entryDTOs) {
 
             // Fetch the ExpenseTypeEntity by ID
-            int expenseTypeId = entryDTO.getExpenseType(); // Assuming getExpenseType returns the ID
+            int expenseTypeId = entryDTO.getExpenseType();
             ExpensetypeEntity expenseType = expenseTypeRepository.findById(expenseTypeId)
                     .orElseThrow(() -> new EntityNotFoundException("Expense type not found with id: " + expenseTypeId));
 
