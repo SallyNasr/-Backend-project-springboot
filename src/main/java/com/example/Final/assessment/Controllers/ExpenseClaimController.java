@@ -68,7 +68,7 @@ public class ExpenseClaimController {
 //        return ResponseEntity.ok(result);
 //    }
 
-    //second method show all the fields54
+    //second method show all the fields
     @GetMapping("/totalclaims/{employeeId}")
     public List<Map<String, Double>> getTotalClaimsPerTypePerEmployee(@PathVariable int employeeId) {
         return expenseClaimService.getTotalClaimsPerTypePerEmployee(employeeId);
