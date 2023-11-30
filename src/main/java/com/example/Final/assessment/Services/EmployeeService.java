@@ -1,9 +1,12 @@
 package com.example.Final.assessment.Services;
 
+import com.example.Final.assessment.Mappers.DepartmentMapper;
 import com.example.Final.assessment.Mappers.EmployeeMapper;
+import com.example.Final.assessment.Models.DepartmentDTO;
 import com.example.Final.assessment.Models.EmployeeDTO;
 import com.example.Final.assessment.Repositories.DepartmentRepository;
 import com.example.Final.assessment.Repositories.EmployeeRepository;
+import com.example.Final.assessment.entities.DepartmentEntity;
 import com.example.Final.assessment.entities.EmployeeEntity;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +22,13 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
     private final BusinessService businessService;
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper,BusinessService businessService,DepartmentRepository departmentRepository){
+    private final DepartmentMapper departmentMapper;
+    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, BusinessService businessService, DepartmentRepository departmentRepository, DepartmentMapper departmentMapper){
         this.employeeRepository=employeeRepository;
         this.employeeMapper=employeeMapper;
         this.businessService=businessService;
         this.departmentRepository=departmentRepository;
+        this.departmentMapper = departmentMapper;
     }
 
 
@@ -68,8 +73,17 @@ public class EmployeeService {
 
     public List<EmployeeDTO> getEmployeesByDepartment(int departmentId) {
         List<EmployeeEntity> employees = employeeRepository.findByDepartmentId(departmentId);
+
         return employeeMapper.employeeEntitiesToEmployeeDTOs(employees);
-}
+//                .stream()
+//                .map(employeeDTO -> {
+//                    DepartmentEntity departmentEntity = employeeRepository.findDepartmentByEmployeeId(employeeDTO.getId());
+//                    DepartmentDTO departmentDTO = departmentMapper.departmentEntityToDepartmentDTO(departmentEntity);
+//                    employeeDTO.setDepartment(departmentDTO);
+//                    return employeeDTO;
+//                })
+//                .collect(Collectors.toList());
+    }
 
     public void deleteEmployee(int employeeId) {
         employeeRepository.deleteById(employeeId);

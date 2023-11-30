@@ -13,5 +13,5 @@ public class EmployeeDTO {
     private int departmentId;
     private String email;
     private String name;
-    private List <DepartmentDTO> department;
+    private DepartmentDTO department;
 }
