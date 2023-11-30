@@ -1,7 +1,6 @@
 package com.example.Final.assessment.Services;
 
 import com.example.Final.assessment.Mappers.LeaveMapper;
-import com.example.Final.assessment.Models.EmployeeDTO;
 import com.example.Final.assessment.Models.LeaveDTO;
 import com.example.Final.assessment.Repositories.LeaveRepository;
 import com.example.Final.assessment.entities.LeaveEntity;
@@ -63,12 +62,26 @@ public class LeaveService {
 //Submit leave request
 
     public LeaveDTO submitLeave(LeaveDTO leaveDTO) {
-        LeaveEntity leaveEntity=leaveMapper.leaveDTOToLeaveEntity(leaveDTO);
+
+        LeaveEntity leaveEntity = leaveMapper.leaveDTOToLeaveEntity(leaveDTO);
         try {
+            if (leaveDTO.getLeaveType() == 0) {
+                throw new IllegalArgumentException("Leave type cannot be 0.");
+            }
             leaveRepository.save(leaveEntity);
+            leaveDTO.setError("No errors: added successfully" );
+
+        } catch (IllegalArgumentException e) {
+            // Set the error message in the LeaveDTO
+           leaveDTO.setError("Leave submission failed: " + e.getMessage());
+            return leaveDTO;
         } catch (Exception e) {
             e.printStackTrace();
-        }        return leaveDTO;
+
+            leaveDTO.setError("Failed to save leave entry."+ e.getMessage());
+        }
+      return leaveDTO;
+
     }
 
     public List<LeaveDTO> getLeavesByEmployeeIdAndFromDateAndToDate(int employeeId, Date fromDate, Date toDate) {
