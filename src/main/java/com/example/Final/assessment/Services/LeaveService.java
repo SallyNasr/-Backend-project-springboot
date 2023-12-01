@@ -65,20 +65,11 @@ public class LeaveService {
 
         LeaveEntity leaveEntity = leaveMapper.leaveDTOToLeaveEntity(leaveDTO);
         try {
-            if (leaveDTO.getLeaveType() == 0) {
-                throw new IllegalArgumentException("Leave type cannot be 0.");
-            }
             leaveRepository.save(leaveEntity);
-            leaveDTO.setError("No errors: added successfully" );
 
-        } catch (IllegalArgumentException e) {
-            // Set the error message in the LeaveDTO
-           leaveDTO.setError("Leave submission failed: " + e.getMessage());
-            return leaveDTO;
         } catch (Exception e) {
             e.printStackTrace();
 
-            leaveDTO.setError("Failed to save leave entry."+ e.getMessage());
         }
       return leaveDTO;
 

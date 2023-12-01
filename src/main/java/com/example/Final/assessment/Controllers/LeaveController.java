@@ -66,9 +66,13 @@ public class LeaveController {
 
 
     @PostMapping("/submit")
-    public ResponseEntity<LeaveDTO> submitLeave(@RequestBody LeaveDTO leaveDTO) {
-        LeaveDTO responseDTO = leaveService.submitLeave(leaveDTO);
-        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+    public ResponseEntity<?> submitLeave(@RequestBody LeaveDTO leaveDTO) {
+        if (leaveDTO.getLeaveType() != 0) {
+            LeaveDTO responseDTO = leaveService.submitLeave(leaveDTO);
+            return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>("Leave submission failed: Leave type cannot be null", HttpStatus.CREATED);
+
     }
 
 

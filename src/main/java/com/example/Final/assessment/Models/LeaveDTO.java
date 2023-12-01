@@ -14,6 +14,6 @@ public class LeaveDTO {
     private int numberOfDays;
     private String note;
     private int employeeId;
-    private String error; // New field for error message
+
 
 }
