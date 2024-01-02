@@ -2,9 +2,7 @@ package com.example.Final.assessment.Models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
@@ -21,5 +19,4 @@ public class ExpenseClaimEntryDTO {
     private Double total;
     private ExpenseClaimDTO expenseClaims;
     private ExpenseTypeDTO expenseTypes;
-
 }

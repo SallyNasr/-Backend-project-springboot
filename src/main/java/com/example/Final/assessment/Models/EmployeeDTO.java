@@ -1,7 +1,6 @@
 package com.example.Final.assessment.Models;
 
-import com.example.Final.assessment.entities.DepartmentEntity;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 

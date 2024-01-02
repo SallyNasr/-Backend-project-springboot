@@ -1,10 +1,7 @@
 package com.example.Final.assessment.Controllers;
 
-import com.example.Final.assessment.Mappers.LeaveMapper;
 import com.example.Final.assessment.Models.LeaveDTO;
-import com.example.Final.assessment.Repositories.LeaveRepository;
 import com.example.Final.assessment.Services.BusinessService;
-import com.example.Final.assessment.Services.EmployeeService;
 import com.example.Final.assessment.Services.LeaveService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,22 +13,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/leave")
 public class LeaveController {
 
     private final LeaveService leaveService;
     private final BusinessService businessService;
-    private final LeaveRepository leaveRepository;
-    private final LeaveMapper leaveMapper;
-    private final EmployeeService employeeService;
 
-    public LeaveController(LeaveService leaveService, BusinessService businessService, LeaveRepository leaveRepository, LeaveMapper leaveMapper, EmployeeService employeeService) {
+
+    public LeaveController(LeaveService leaveService, BusinessService businessService) {
         this.leaveService = leaveService;
         this.businessService = businessService;
-        this.leaveRepository = leaveRepository;
-        this.leaveMapper = leaveMapper;
-        this.employeeService = employeeService;
+
     }
 
     @GetMapping("/all")
@@ -39,6 +33,8 @@ public class LeaveController {
         List<LeaveDTO> leaves = leaveService.getAllLeaves();
         return new ResponseEntity<>(leaves, HttpStatus.OK);
     }
+
+
 
     @GetMapping("/find/{id}")
     public ResponseEntity<LeaveDTO> getLeaveById(@PathVariable int id) {
@@ -49,7 +45,6 @@ public class LeaveController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteLeave(@PathVariable int id) {
@@ -75,8 +70,6 @@ public class LeaveController {
 
     }
 
-
-
     @PostMapping("/leaverange")
    public ResponseEntity<List<LeaveDTO>> getLeavesByEmployeeIdAndStartDateAndEndDate(
             @RequestParam int employeeId,
@@ -96,7 +89,10 @@ public class LeaveController {
         parameters.put("leaveType", leaveType);
         parameters.put("employeeId", employeeId);
         Page<LeaveDTO> leavePage = leaveService.getLeavesByLeaveTypeAndEmployeeId( parameters, page, size);
-        return ResponseEntity.ok(leavePage);}
+        return ResponseEntity.ok(leavePage);
+    }
+
+
 }
 
 

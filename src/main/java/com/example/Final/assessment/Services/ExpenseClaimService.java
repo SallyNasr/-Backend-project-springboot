@@ -3,10 +3,7 @@ package com.example.Final.assessment.Services;
 import com.example.Final.assessment.Mappers.EmployeeMapper;
 import com.example.Final.assessment.Mappers.ExpenseClaimEntryMapper;
 import com.example.Final.assessment.Mappers.ExpenseClaimMapper;
-import com.example.Final.assessment.Models.EmployeeDTO;
-import com.example.Final.assessment.Models.ExpenseClaimDTO;
-import com.example.Final.assessment.Models.ExpenseClaimEntryDTO;
-import com.example.Final.assessment.Models.ExpenseTypeDTO;
+import com.example.Final.assessment.Models.*;
 import com.example.Final.assessment.Repositories.ExpenseClaimEntryRepository;
 import com.example.Final.assessment.Repositories.ExpenseClaimRepository;
 import com.example.Final.assessment.Repositories.ExpenseTypeRepository;
@@ -129,8 +126,8 @@ public class ExpenseClaimService {
 
         return expenseClaimMapper.ExpenseClaimEntityToExpenseClaimDTO(expenseClaimEntity);
     }
-
-    //    public Map<String, Double> getTotalClaimsPerTypePerEmployee(int employeeId) {
+//
+//        public Map<String, Double> getTotalClaimsPerTypePerEmployee(int employeeId) {
 //        List<Map<String, Double>> results = expenseClaimRepository.getTotalClaimsPerTypePerEmployee(employeeId);
 //
 //        Map<String, Double> totalClaimsPerType = new HashMap<>();
@@ -159,11 +156,48 @@ public class ExpenseClaimService {
 //    }
 
     //    show all the fields
-     public List<Map<String, Double>> getTotalClaimsPerTypePerEmployee(int employeeId) {
-        List<Map<String, Double>> results = expenseClaimRepository.getTotalClaimsPerTypePerEmployee(employeeId);
-        return results;
+//     public List<Map<String, Double>> getTotalClaimsPerTypePerEmployee(int employeeId) {
+//        List<Map<String, Double>> results = expenseClaimRepository.getTotalClaimsPerTypePerEmployee(employeeId);
+//        return results;
+//    }
+
+//to get all details
+    public ExpenseClaimDTO getDetails(int id) {
+        Optional<ExpenseclaimEntity> expenseClaimOptional = expenseClaimRepository.findById(id);
+
+        if (expenseClaimOptional.isPresent()) {
+            ExpenseclaimEntity expenseClaimEntity = expenseClaimOptional.get();
+            ExpenseClaimDTO expenseClaim = mapToDTO(expenseClaimEntity);
+            return expenseClaim;
+        } else {
+            throw new EntityNotFoundException("Expense claim not found with ID: " + id);
+        }
+    }
+
+    private ExpenseClaimDTO mapToDTO(ExpenseclaimEntity entity) {
+        ExpenseClaimDTO dto = new ExpenseClaimDTO();
+        dto.setId(entity.getId());
+        dto.setDate(entity.getDate());
+        dto.setDescription(entity.getDescription());
+        dto.setTotal(entity.getTotal());
+        dto.setStatus(entity.getStatus());
+        dto.setEmployeeId(entity.getEmployeeId());
+    return dto;
     }
 
 
+    public List<ExpensePerTypePerEmployeeDTO> getTotalClaimsPerTypePerEmployee(int employeeId) {
+        List<ExpensetypeEntity> expenseTypes = expenseTypeRepository.findAll();
+        List<ExpensePerTypePerEmployeeDTO> result = new ArrayList<>();
+
+        for (ExpensetypeEntity expenseType : expenseTypes) {
+            Double totalAmount = expenseClaimEntryRepository.getTotalAmountByTypeAndEmployee(expenseType.getId(), employeeId);
+            ExpensePerTypePerEmployeeDTO dto = new ExpensePerTypePerEmployeeDTO(expenseType.getName(), totalAmount);
+            result.add(dto);
+        }
+
+        return result;
+    }
 
 }
+

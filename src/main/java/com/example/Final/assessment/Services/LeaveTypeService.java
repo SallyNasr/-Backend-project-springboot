@@ -1,11 +1,8 @@
 package com.example.Final.assessment.Services;
 
-import com.example.Final.assessment.Mappers.LeaveMapper;
 import com.example.Final.assessment.Mappers.LeaveTypeMapper;
-import com.example.Final.assessment.Models.LeaveDTO;
 import com.example.Final.assessment.Models.LeaveTypeDTO;
 import com.example.Final.assessment.Repositories.LeaveTypeRepository;
-import com.example.Final.assessment.entities.LeaveEntity;
 import com.example.Final.assessment.entities.LeavetypeEntity;
 import org.springframework.stereotype.Service;
 

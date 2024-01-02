@@ -20,6 +20,8 @@ public interface LeaveRepository extends JpaRepository<LeaveEntity,Integer> {
     List<LeaveEntity> getLeavesByEmployeeIdAndFromDateAndToDate(@Param("employeeId") int employeeId, @Param("fromDate") Date startDate, @Param("toDate") Date toDate);
 
     Page<LeaveEntity> getLeavesByLeaveTypeAndEmployeeId(int leaveType, int employeeId, PageRequest pageable);
+
+
 }
 
 

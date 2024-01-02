@@ -1,24 +1,37 @@
 package com.example.Final.assessment.Controllers;
 
-import com.example.Final.assessment.Models.EmployeeDTO;
+import com.example.Final.assessment.Mappers.ExpenseClaimEntryMapper;
 import com.example.Final.assessment.Models.ExpenseClaimDTO;
+import com.example.Final.assessment.Models.ExpenseClaimEntryDTO;
+import com.example.Final.assessment.Models.ExpenseClaimRequestDTO;
+import com.example.Final.assessment.Models.ExpensePerTypePerEmployeeDTO;
+import com.example.Final.assessment.Repositories.ExpenseClaimEntryRepository;
 import com.example.Final.assessment.Services.BusinessService;
 import com.example.Final.assessment.Services.ExpenseClaimService;
+import com.example.Final.assessment.entities.ExpenseclaimentryEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+@CrossOrigin(origins = "http://localhost:4200")
 
 @RestController
 @RequestMapping("/expenseclaims")
 public class ExpenseClaimController {
     private final ExpenseClaimService expenseClaimService;
     private final BusinessService businessService;
-    public ExpenseClaimController(ExpenseClaimService expenseClaimService, BusinessService businessService1) {
+    private final ExpenseClaimEntryRepository expenseClaimEntryRepository;
+    private final ExpenseClaimEntryMapper expenseClaimEntryMapper;
+
+    public ExpenseClaimController(ExpenseClaimService expenseClaimService, BusinessService businessService1, ExpenseClaimEntryRepository expenseClaimEntryRepository, ExpenseClaimEntryMapper expenseClaimEntryMapper) {
         this.expenseClaimService = expenseClaimService;
         this.businessService = businessService1;
+        this.expenseClaimEntryRepository = expenseClaimEntryRepository;
+        this.expenseClaimEntryMapper = expenseClaimEntryMapper;
     }
 
     @GetMapping("/all")
@@ -69,8 +82,26 @@ public class ExpenseClaimController {
 
     //second method show all the fields
     @GetMapping("/totalclaims/{employeeId}")
-    public List<Map<String, Double>> getTotalClaimsPerTypePerEmployee(@PathVariable int employeeId) {
-        return expenseClaimService.getTotalClaimsPerTypePerEmployee(employeeId);
+//    public List<Map<String, Double>> getTotalClaimsPerTypePerEmployee(@PathVariable int employeeId) {
+//        return expenseClaimService.getTotalClaimsPerTypePerEmployee(employeeId);
+//    }
+
+    //new way:for frontend
+    public ResponseEntity<List<ExpensePerTypePerEmployeeDTO>> getTotalClaimsPerTypePerEmployee(
+            @PathVariable int employeeId) {
+        List<ExpensePerTypePerEmployeeDTO> result = expenseClaimService.getTotalClaimsPerTypePerEmployee(employeeId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+
+    @GetMapping("/details/{id}")
+    public ResponseEntity<ExpenseClaimDTO> getDetails(@PathVariable int id) {
+        ExpenseClaimDTO result = expenseClaimService.getDetails(id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
+
+
 }
 

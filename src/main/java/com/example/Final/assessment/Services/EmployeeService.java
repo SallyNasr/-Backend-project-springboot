@@ -32,12 +32,28 @@ public class EmployeeService {
     }
 
 
+//    public List<EmployeeDTO> getAllEmployees() {
+//        List<EmployeeEntity> employees = employeeRepository.findAll();
+//        return employees.stream()
+//                .map(employeeMapper::employeeEntityToEmployeeDTO)
+//                .collect(Collectors.toList());
+//    }
+
     public List<EmployeeDTO> getAllEmployees() {
         List<EmployeeEntity> employees = employeeRepository.findAll();
         return employees.stream()
-                .map(employeeMapper::employeeEntityToEmployeeDTO)
+                .map(employee -> {
+                    EmployeeDTO employeeDTO = employeeMapper.employeeEntityToEmployeeDTO(employee);
+                    DepartmentEntity departmentEntity = departmentRepository.findById(employee.getDepartmentId()).orElse(null);
+                    if (departmentEntity != null) {
+                        DepartmentDTO departmentDTO = departmentMapper.departmentEntityToDepartmentDTO(departmentEntity);
+                        employeeDTO.setDepartment(departmentDTO);
+                    }
+                    return employeeDTO;
+                })
                 .collect(Collectors.toList());
     }
+
 
     public EmployeeDTO getEmployeeById(int employeeId) {
         EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).orElse(null);

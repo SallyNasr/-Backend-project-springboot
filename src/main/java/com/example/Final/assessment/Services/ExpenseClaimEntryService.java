@@ -4,9 +4,11 @@ import com.example.Final.assessment.Mappers.ExpenseClaimEntryMapper;
 import com.example.Final.assessment.Mappers.ExpenseClaimMapper;
 import com.example.Final.assessment.Models.ExpenseClaimDTO;
 import com.example.Final.assessment.Models.ExpenseClaimEntryDTO;
+import com.example.Final.assessment.Models.ExpenseTypeDTO;
 import com.example.Final.assessment.Repositories.ExpenseClaimEntryRepository;
 import com.example.Final.assessment.entities.ExpenseclaimEntity;
 import com.example.Final.assessment.entities.ExpenseclaimentryEntity;
+import com.example.Final.assessment.entities.ExpensetypeEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,12 +31,68 @@ public class ExpenseClaimEntryService {
         this.businessService = businessService;
     }
 
-    public List<ExpenseClaimEntryDTO> getAllExpenseClaimEntrys() {
-        List<ExpenseclaimentryEntity> employees = expenseClaimEntryRepository.findAll();
-        return employees.stream()
-                .map(expenseClaimEntryMapper::ExpenseClaimEntryEntityToExpenseClaimEntryDTO)
+//    public List<ExpenseClaimEntryDTO> getAllExpenseClaimEntries() {
+//        List<ExpenseclaimentryEntity> employees = expenseClaimEntryRepository.findAll();
+//        return employees.stream()
+//                .map(expenseClaimEntryMapper::ExpenseClaimEntryEntityToExpenseClaimEntryDTO)
+//                .collect(Collectors.toList());
+//    }
+
+    public List<ExpenseClaimEntryDTO> getAllExpenseClaimEntries() {
+        List<ExpenseclaimentryEntity> expenseClaimEntries = expenseClaimEntryRepository.findAll();
+        return expenseClaimEntries.stream()
+                .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
+
+    private ExpenseClaimEntryDTO mapToDTO(ExpenseclaimentryEntity entity) {
+        ExpenseClaimEntryDTO expenseClaimEntryDTO = expenseClaimEntryMapper.ExpenseClaimEntryEntityToExpenseClaimEntryDTO(entity);
+
+        // Populate names
+//        ExpenseClaimDTO expenseClaimDTO = mapToExpenseClaimDTO(entity.getExpenseClaim());
+//        if (expenseClaimDTO != null) {
+//            dto.setExpenseClaims(expenseClaimDTO);
+//        }
+//
+//        ExpenseTypeDTO expenseTypeDTO = mapToExpenseTypeDTO(entity.getExpenseType());
+//        if (expenseTypeDTO != null) {
+//            dto.setExpenseTypes(expenseTypeDTO);
+//        }
+//
+        return expenseClaimEntryDTO;
+    }
+
+    private ExpenseClaimDTO mapToExpenseClaimDTO(ExpenseclaimEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        ExpenseClaimDTO dto = new ExpenseClaimDTO();
+        dto.setId(entity.getId());
+        dto.setDate(entity.getDate());
+        dto.setDescription(entity.getDescription());
+        dto.setTotal(entity.getTotal());
+        dto.setStatus(entity.getStatus());
+        dto.setEmployeeId(entity.getEmployeeId());
+        // Map other fields if needed
+        return dto;
+    }
+
+    private ExpenseTypeDTO mapToExpenseTypeDTO(ExpensetypeEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        ExpenseTypeDTO dto = new ExpenseTypeDTO();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        // Map other fields if needed
+        return dto;
+    }
+
+
+
+
 
     public ExpenseClaimEntryDTO getExpenseClaimEntryById(int id) {
         ExpenseclaimentryEntity expenseclaimentry = expenseClaimEntryRepository.findById(id).orElse(null);

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+@CrossOrigin(origins = "http://localhost:4200")
 
 @RestController
 @RequestMapping("/expenseclaimsentry")
@@ -24,8 +25,8 @@ public class ExpenseClaimEntryController {
 
     @GetMapping("/all")
     public ResponseEntity<List<ExpenseClaimEntryDTO>> getAllExpenseClaimEntrys() {
-        List<ExpenseClaimEntryDTO> expenseClaimEntrys = expenseClaimEntryService.getAllExpenseClaimEntrys();
-        return new ResponseEntity<>(expenseClaimEntrys, HttpStatus.OK);
+        List<ExpenseClaimEntryDTO> expenseClaimEntries = expenseClaimEntryService.getAllExpenseClaimEntries();
+        return new ResponseEntity<>(expenseClaimEntries, HttpStatus.OK);
     }
 
     @GetMapping("/find/{id}")
